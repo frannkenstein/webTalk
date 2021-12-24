@@ -1,0 +1,40 @@
+.myButton {
+  border-radius: 10px;
+  height: 3rem;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.oneButton {
+  border: 1px solid black;
+  background: white;
+}
+
+.twoButton {
+  border: 1px solid#21b6a8;
+  background: #21b6a8;
+  color: white;
+}
+
+.scheduleAndSend {
+  @extend .myButton, .twoButton;
+  position: relative;
+}
+
+.line {
+  display: block;
+  position: absolute;
+  // transform: rotateX(90deg);
+  width: 2px;
+  height: 1.8rem;
+  background-color: black;
+  right: 55px;
+}
+.arrow {
+  position: absolute;
+  right: 20px;
+}

@@ -1,0 +1,16 @@
+export const String = {
+  CHAT: "Conversations",
+  GROUPS: "Groups",
+  OFFLINE: "Offline",
+  ONLINE: "Active",
+  WELCOME: "welcome Back",
+  SIGN: "Sign in to chat",
+  HELLO: "Hello, Friend!",
+  CREATE: "Create Account",
+  SIGNUP: "Sign Up to WebTalk",
+  CREAD: "or signup using credentials",
+  SIGNIN: "Sign in to WebTalk",
+  SET_STATUS: "Set Status",
+  PROFILE: "Edit Profile",
+  MORE: "More",
+};

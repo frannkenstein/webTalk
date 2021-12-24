@@ -1,0 +1,10 @@
+.userDetails {
+  align-items: center;
+  cursor: pointer;
+
+  .userInfo {
+    .chatName {
+      font-size: calc(1rem + 0.5vw);
+    }
+  }
+}

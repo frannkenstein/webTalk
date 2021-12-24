@@ -1,0 +1,51 @@
+@import "../../Styles/style.scss";
+
+.dashboard {
+  min-height: 100vh;
+  background-color: #e4e3e3;
+  min-width: 20rem;
+  position: relative;
+
+  .toggleButton {
+    position: absolute;
+  }
+  .logo {
+    font-size: 2rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .userList {
+    padding: 0 1%;
+    .list {
+      margin: 1% 0;
+      position: relative;
+      cursor: pointer;
+      border-radius: 4px;
+      align-items: center;
+      background-color: #f8f8f8;
+      width: 100%;
+      &:hover {
+        background-color: $dashBoardBackgroundHover;
+      }
+
+      .onLineTag {
+        height: 10px;
+        width: 10px;
+        background: green;
+        right: 0;
+        position: absolute;
+        border-radius: 50%;
+      }
+      .newMessage {
+        height: 30px;
+        width: 30px;
+        background: red;
+        right: 10%;
+        position: absolute;
+        border-radius: 50%;
+        color: white;
+        font-weight: 700;
+      }
+    }
+  }
+}

@@ -5,7 +5,7 @@ export const chatList = async (req, res) => {
 
   try {
     const data = await conversation.find({ roomId });
-    if (data) console.log("Yes");
+
     res.status(200).json(data);
   } catch (err) {
     res.status(500).send(err);

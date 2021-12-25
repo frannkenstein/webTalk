@@ -109,7 +109,7 @@ const App = () => {
       commitTime
     );
 
-    console.table(tableValue);
+    // console.table(tableValue);
   };
 
   return (

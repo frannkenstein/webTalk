@@ -8,10 +8,7 @@ import { loadOnlineUsers } from "../../Redux/actions/onlineActions";
 import "./DashBoard.scss";
 import { addMessage } from "../../Redux/actions/messageActions";
 import Users from "../../Components/Users/Users";
-import {
-  clearNewMessageses,
-  loadNewMessage,
-} from "../../Redux/actions/newMessageAction";
+import { loadNewMessage } from "../../Redux/actions/newMessageAction";
 
 import loadable from "@loadable/component";
 import { io } from "socket.io-client";
@@ -39,7 +36,7 @@ const DashBoard = () => {
   const [senderId, setsenderId] = useState("");
   const [receiverId, setreceiverId] = useState("");
   const [profile, setProfile] = useState(null);
-  const [chatId, setRoomChatId] = useState("");
+  const [chatId, setRoomChatId] = useState(null);
 
   const socket = useRef();
 
@@ -57,7 +54,7 @@ const DashBoard = () => {
   useEffect(() => {
     load();
     socket.current = io("ws://localhost:3002");
-    localStorage.removeItem("roomId");
+    setRoomChatId(localStorage.getItem("chatId"));
 
     dispatch(socketActions(socket.current));
 
@@ -105,13 +102,17 @@ const DashBoard = () => {
         user[j]._id,
         localStorage.getItem("userId")
       );
+
       if (result.data.length && !(result.data[0]._id === chatId)) {
-        localStorage.setItem("roomId", result.data[0]._id);
-        setRoomChatId((chatId) => (chatId = ""));
-        setRoomChatId((chatId) => (chatId = result.data[0]._id));
+        chatId &&
+          setRoomChatId((prevState) => {
+            return "";
+          });
 
-        dispatch(clearNewMessageses(result.data[0]._id));
-
+        setRoomChatId((prevState) => {
+          return result.data[0]._id;
+        });
+        localStorage.setItem("chatId", result.data[0]._id);
         setreceiverId(user[j]._id);
 
         setsenderId(localStorage.getItem("userId"));
@@ -136,8 +137,8 @@ const DashBoard = () => {
 
             <div className="dm adspbtw font-h2 font-600">{String.CHAT}</div>
             <div className="userList flex-column">
-              {user &&
-                user.map((user, i) => {
+              {users[0] &&
+                users[0].map((user, i) => {
                   let friendId = user._id;
                   let userId = localStorage.getItem("userId");
 
@@ -185,6 +186,7 @@ const DashBoard = () => {
               />
             </div>
           </div>
+
           {chatId && (
             <Chat
               chatId={chatId}

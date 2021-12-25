@@ -32,18 +32,17 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
   const [unique, setUniqueId] = useState("");
 
   async function friendsID() {
-    setUniqueId(localStorage.getItem("roomId"));
-
     let data = await chatList(localStorage.getItem("roomId") ?? chatId);
-
     dispatch(
       loadMesages({
         messages: data.data,
-        roomId: localStorage.getItem("roomId") ?? chatId,
+        roomId: chatId,
       })
     );
+    setUniqueId(chatId);
   }
   useEffect(() => {
+    console.log("mount");
     friendsID();
 
     return () => {
@@ -201,16 +200,10 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
   }, []);
 
   useEffect(() => {
-    (mess || messages) &&
-      scrollRefArray.current?.scrollIntoView({
-        behavior: "smooth",
-      });
-
-    setTimeout(() => {
-      scrollRefArray.current?.scrollIntoView({
-        behavior: "smooth",
-      });
-    }, 200);
+    scrollRefArray.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
   }, [mess, messages]);
 
   const handleCrossIcon = () => {

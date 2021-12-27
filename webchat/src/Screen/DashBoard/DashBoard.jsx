@@ -54,7 +54,7 @@ const DashBoard = () => {
   useEffect(() => {
     load();
     socket.current = io("ws://localhost:3002");
-    setRoomChatId(localStorage.getItem("chatId"));
+    // setRoomChatId(localStorage.getItem("chatId"));
 
     dispatch(socketActions(socket.current));
 
@@ -104,6 +104,8 @@ const DashBoard = () => {
       );
 
       if (result.data.length && !(result.data[0]._id === chatId)) {
+        localStorage.setItem("roomId", result.data[0]._id);
+
         chatId &&
           setRoomChatId((prevState) => {
             return "";
@@ -113,6 +115,7 @@ const DashBoard = () => {
           return result.data[0]._id;
         });
         localStorage.setItem("chatId", result.data[0]._id);
+
         setreceiverId(user[j]._id);
 
         setsenderId(localStorage.getItem("userId"));

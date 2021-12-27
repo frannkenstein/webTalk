@@ -199,13 +199,6 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
     domElement.scrollIntoView({ block: "start", behavior: "smooth" });
   }, []);
 
-  useEffect(() => {
-    scrollRefArray.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-    });
-  }, [mess, messages]);
-
   const handleCrossIcon = () => {
     dispatch(clearReply());
   };

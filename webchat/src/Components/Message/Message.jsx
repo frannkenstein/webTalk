@@ -22,16 +22,13 @@ const Message = ({ message, visible, userName, key, ref }) => {
   const scrollRefArray = useRef();
 
   useEffect(() => {
-    message &&
-      scrollRefArray.current?.scrollIntoView({
-        behavior: "smooth",
-      });
+    let ele = scrollRefArray.current;
 
-    setTimeout(() => {
-      scrollRefArray.current?.scrollIntoView({
-        behavior: "smooth",
+    ele &&
+      ele.scrollIntoView({
+        top: ele.scrollHeight,
+        left: 0,
       });
-    }, 200);
   }, [message]);
   return (
     <div

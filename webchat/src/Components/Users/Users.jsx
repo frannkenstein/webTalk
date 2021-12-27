@@ -26,17 +26,18 @@ const Users = ({ sender, userName, friendId, image, key }) => {
     setpop({ ids: newMessages.ids });
   }, [newMessages]);
   return (
-    <div key={key} className="flex-row">
+    <div key={key} className="flex-row" style={{ alignItems: "center" }}>
       <Avatar alt="Aakash Singh" src={image} />
 
       <div className="nameMessage flex-column">
         <li className="chatName flex-column font-h4 font-600">{userName}</li>
       </div>
 
-      {user?.users &&
-        user?.users?.some((user) => user?.userId === friendId) && (
-          <span className="onLineTag"></span>
-        )}
+      {user?.users && user?.users?.some((user) => user?.userId === friendId) ? (
+        <span className="onLineTag"></span>
+      ) : (
+        <span className="offLineTag"></span>
+      )}
 
       {pop.ids.includes(r) && (
         <span className="newMessage flex-column adjust">1</span>

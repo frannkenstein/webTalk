@@ -36,6 +36,10 @@
         position: absolute;
         border-radius: 50%;
       }
+      .offLineTag {
+        @extend .onLineTag;
+        background: lightgray;
+      }
       .newMessage {
         height: 30px;
         width: 30px;

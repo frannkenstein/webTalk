@@ -150,33 +150,21 @@ const DashBoard = () => {
                   return (
                     !(friendId === userId) && (
                       <div
-                        className="flex-row"
-                        style={{
-                          width: "100%",
-                          alignItems: "center",
-                          cursor: "pointer",
+                        className="list flex-row"
+                        onClick={() => {
+                          dispatch(userDetail(user.username));
+
+                          handleChat(i, user.image);
                         }}
                         key={user._id}
                       >
-                        <div
-                          className="list flex-row"
-                          onClick={() => {
-                            dispatch(userDetail(user.username));
-
-                            handleChat(i, user.image);
-                          }}
-                          key={i}
-                        >
-                          <Users
-                            sender={userId}
-                            userName={user.username}
-                            friendId={friendId}
-                            image={user.image}
-                            key={user._id}
-                          />
-                        </div>
-
-                        <Follow {...{ friendId, userId }} />
+                        <Users
+                          sender={userId}
+                          userName={user.username}
+                          friendId={friendId}
+                          image={user.image}
+                          key={user._id}
+                        />
                       </div>
                     )
                   );

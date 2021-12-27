@@ -62,8 +62,23 @@ app.post("/signUp", user);
 app.post("/login", user);
 
 app.get("/userDetails", userDetails);
+app.get("/friendsList", list);
+
+app.get("/chatList/:id", chatList);
 
 // get Messages
+
+app.get("/replyList/:conversationId", async (req, res) => {
+  const conversationId = req.params.conversationId;
+
+  try {
+    const data = await Rep.find({ conversationId });
+    // console.log(data);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 app.post("/create", async (req, res) => {
   const data = req.body;
@@ -79,6 +94,40 @@ app.post("/create", async (req, res) => {
     } catch (error) {
       res.status(500).send(err);
     }
+  }
+});
+
+app.post("/reply", (req, res) => {
+  const data = req.body;
+
+  try {
+    Rep.create(data, (err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(201).send(data);
+      }
+    });
+  } catch (error) {
+    console.log(error.message, "chat creation failed.");
+  }
+});
+
+app.post("/addfriend", async (req, res) => {
+  let data = {
+    s1: req.body.userId,
+    s2: req.body.friendId,
+  };
+  try {
+    AddFriend.create(data, (err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(201).send(data);
+      }
+    });
+  } catch (error) {
+    console.log(error.message, "chat creation failed.");
   }
 });
 

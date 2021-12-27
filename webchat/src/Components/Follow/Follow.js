@@ -9,15 +9,15 @@ const Follow = ({ friendId, userId }) => {
   const [follows, setFollow] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    async function friend() {
-      let result = await friendsList(friendId, userId);
+  async function friend() {
+    let result = await friendsList(friendId, userId);
 
-      if (result.data) {
-        dispatch(addFriend(result.data[0]._id));
-        setFollow(true);
-      }
+    if (result.data) {
+      dispatch(addFriend(result.data[0]._id));
+      setFollow(true);
     }
+  }
+  useEffect(() => {
     friend();
   }, []);
 

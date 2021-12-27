@@ -11,7 +11,7 @@ import groups from "./routes/groups/groups.js";
 import Conversation from "./models/conversation.js";
 import Rep from "./models/reply.js";
 import AddFriend from "./models/addfriend.js";
-import multer from "multer";
+// import multer from "multer";
 
 import path from "path";
 
@@ -222,34 +222,34 @@ app.delete("/delete/:id", async (req, res) => {
 //     }
 //   }
 // }, 1000 * 2);
-const upload = multer();
-app.post("/upload", upload.single("file"), async (req, res, next) => {
-  const { file, body } = req;
-  // console.log(req.file);
-  let messageData = JSON.parse(body.messageData);
+// const upload = multer();
+// app.post("/upload", upload.single("file"), async (req, res, next) => {
+//   const { file, body } = req;
+//   // console.log(req.file);
+//   let messageData = JSON.parse(body.messageData);
 
-  let fileName = `image${Math.floor(Math.random() * 1000)}_${
-    messageData.roomId
-  }.${file.detectedMimeType.split("image/")[1]}`;
-  console.log(fileName);
+//   let fileName = `image${Math.floor(Math.random() * 1000)}_${
+//     messageData.roomId
+//   }.${file.detectedMimeType.split("image/")[1]}`;
+//   console.log(fileName);
 
-  await pipelineAsync(
-    file.stream,
-    fs.createWriteStream(`./public/images/${fileName}`)
-  )
-    .then(() => {
-      messageData.message.message = `/images/${fileName}`;
-      Conversation.create(messageData, (err, messageData) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send(err);
-        } else {
-          console.log("donne");
-          res.status(201).send({ path: `/images/${fileName}` });
-        }
-      });
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
-});
+//   await pipelineAsync(
+//     file.stream,
+//     fs.createWriteStream(`./public/images/${fileName}`)
+//   )
+//     .then(() => {
+//       messageData.message.message = `/images/${fileName}`;
+//       Conversation.create(messageData, (err, messageData) => {
+//         if (err) {
+//           console.log(err);
+//           res.status(500).send(err);
+//         } else {
+//           console.log("donne");
+//           res.status(201).send({ path: `/images/${fileName}` });
+//         }
+//       });
+//     })
+//     .catch((err) => {
+//       console.log(err.message);
+//     });
+// });

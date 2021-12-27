@@ -41,10 +41,11 @@ const DashBoard = () => {
   const socket = useRef();
 
   async function load() {
-    setLoading((prev) => (prev = true));
+    setLoading(true);
     let data = await userDetails();
+
     dispatch(loadUsers(data.data));
-    setLoading((prev) => (prev = false));
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -54,7 +55,6 @@ const DashBoard = () => {
   useEffect(() => {
     load();
     socket.current = io("ws://localhost:3002");
-    // setRoomChatId(localStorage.getItem("chatId"));
 
     dispatch(socketActions(socket.current));
 
@@ -148,33 +148,21 @@ const DashBoard = () => {
                   return (
                     !(friendId === userId) && (
                       <div
-                        className="flex-row"
-                        style={{
-                          width: "100%",
-                          alignItems: "center",
-                          cursor: "pointer",
+                        className="list flex-row"
+                        onClick={() => {
+                          dispatch(userDetail(user.username));
+
+                          handleChat(i, user.image);
                         }}
                         key={user._id}
                       >
-                        <div
-                          className="list flex-row"
-                          onClick={() => {
-                            dispatch(userDetail(user.username));
-
-                            handleChat(i, user.image);
-                          }}
-                          key={i}
-                        >
-                          <Users
-                            sender={userId}
-                            userName={user.username}
-                            friendId={friendId}
-                            image={user.image}
-                            key={user._id}
-                          />
-                        </div>
-
-                        <Follow {...{ friendId, userId }} />
+                        <Users
+                          sender={userId}
+                          userName={user.username}
+                          friendId={friendId}
+                          image={user.image}
+                          key={user._id}
+                        />
                       </div>
                     )
                   );

@@ -53,11 +53,13 @@ const DashBoard = () => {
 
   useEffect(() => {
     load();
-    socket.current = io("ws://localhost:3002");
+    socket.current = io("ws://localhost:3001");
     // setRoomChatId(localStorage.getItem("chatId"));
 
     dispatch(socketActions(socket.current));
-
+    socket.current.on("connect", () => {
+      console.log(socket.id);
+    });
     socket.current.on("getMessage", (data) => {
       let messageData = {
         time: data.time,

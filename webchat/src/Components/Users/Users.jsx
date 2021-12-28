@@ -1,25 +1,31 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Avatar } from "@material-ui/core";
 import { memo, useEffect, useState } from "react";
 import { friendsList } from "../../api/api";
+import { setUserRoomID } from "../../Redux/actions/userRoomId";
 const Users = ({ sender, userName, friendId, image, key }) => {
   const user = useSelector((state) => state.showOnlineUsers);
   const newMessages = useSelector((state) => state.newMessages);
 
+  const dispatch = useDispatch();
   const [pop, setpop] = useState({ ids: [] });
   const [r, setr] = useState("");
 
-  async function f() {
+  async function userRoomId() {
     try {
       let res = await friendsList(sender, friendId);
 
       res.data.length && setr(res.data[0]._id);
+      console.log(res.data[0]._id);
+      dispatch(
+        setUserRoomID({ friendId: friendId, userRoomId: res.data[0]._id })
+      );
     } catch (e) {
       console.log(e);
     }
   }
   useEffect(() => {
-    sender && friendId && f();
+    sender && friendId && userRoomId();
   }, []);
 
   useEffect(() => {

@@ -14,7 +14,7 @@ import loadable from "@loadable/component";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import MyButton from "../../Components/InputComponents/MyButton";
-import Follow from "../../Components/Follow/Follow";
+// import Follow from "../../Components/Follow/Follow";
 import { socketActions } from "../../Redux/actions/socketActions";
 
 const Chat = loadable(() => import("../../Components/Chat/Chat"));
@@ -28,6 +28,8 @@ const UserInfo = loadable(() => import("../../Components/UserInfo/UserInfo"), {
 
 const DashBoard = () => {
   const { users } = useSelector((state) => state.users);
+  const userRoomIdReducer = useSelector((state) => state.userRoomIdReducer);
+
   const dispatch = useDispatch();
 
   const [user, setuser] = useState();
@@ -99,30 +101,24 @@ const DashBoard = () => {
   }, [userIdLocal]);
 
   const handleChat = async (j, image) => {
+    let friendIds = user[j]._id;
+    let roomId = userRoomIdReducer[friendIds];
+
     try {
-      let result = await friendsList(
-        user[j]._id,
-        localStorage.getItem("userId")
-      );
+      localStorage.setItem("roomId", roomId);
 
-      if (result.data.length && !(result.data[0]._id === chatId)) {
-        localStorage.setItem("roomId", result.data[0]._id);
-
-        chatId &&
-          setRoomChatId((prevState) => {
-            return "";
-          });
-
+      chatId &&
         setRoomChatId((prevState) => {
-          return result.data[0]._id;
+          return "";
         });
-        localStorage.setItem("chatId", result.data[0]._id);
 
-        setreceiverId(user[j]._id);
+      setRoomChatId((prevState) => roomId);
+      localStorage.setItem("chatId", roomId);
 
-        setsenderId(localStorage.getItem("userId"));
-        setProfile(image);
-      }
+      setreceiverId(user[j]._id);
+
+      setsenderId(localStorage.getItem("userId"));
+      setProfile(image);
     } catch (e) {
       console.log(e);
     }

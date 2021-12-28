@@ -36,10 +36,103 @@ const io = new Server(http, {
   cors: { origin: "http://localhost:3000" },
 });
 
+let id = [];
+const rooms = {};
+
+const addUser = (userId, socketId) => {
+  !id.some((id) => id.userId === userId) && id.push({ userId, socketId });
+  console.log(`Number of users online ${id.length}`);
+};
+
+const removeUser = (socketId) => {
+  id = id.filter((id) => id.socketId !== socketId);
+};
+
+const getUser = (receiverId) => {
+  return id.find((id) => id.userId === receiverId);
+};
+
 io.on("connection", (socket) => {
   console.log("New websocket connection", socket.id);
-  socket.on("checkcheck", (data) => {
+  socket.on("addUser", (userId) => {
+    addUser(userId, socket.id);
+
+    io.emit("getUsers", id);
+  });
+
+  socket.on("socket", (data) => {
+    const user = getUser(data.receiverId);
+
+    io.to(user?.socketId).emit("getMessage", {
+      time: data.time,
+      senderId: data.senderId,
+      receiverId: data.receiverId,
+      messageId: data.time,
+      message: data.message.message,
+      referenceId: data.messageId,
+      replied: data.replied,
+      read: data.message.read,
+      attachments: data.message.attachments,
+      roomId: data.roomId,
+    });
+  });
+  socket.on("user_join", (data) => {
     console.log(data);
+    socket.join(data.groupName);
+  });
+
+  socket.on("gmessage", (data) => {
+    console.log(data);
+    io.to(data.roomName).emit("takeMessage", data.message);
+  });
+
+  socket.on("room-created", (data) => {
+    rooms[data] = { users: [] };
+    io.emit("room", data);
+
+    rooms[data].users[socket.id] = data;
+    console.log(rooms);
+  });
+
+  socket.on(
+    "sendmessage",
+    ({
+      time,
+      senderId,
+      receiverId,
+
+      messageId,
+      message,
+      referenceId,
+
+      replied,
+      read,
+      attachments,
+
+      roomId,
+    }) => {
+      const user = getUser(receiverId);
+
+      io.to(user.socketId).emit("getMessage", {
+        time,
+        senderId,
+        receiverId,
+        messageId,
+        message,
+        referenceId,
+        replied,
+        read,
+        attachments,
+        roomId,
+      });
+    }
+  );
+  socket.on("disconnect", () => {
+    console.log("a user disconnected");
+    removeUser(socket.id);
+    console.log(`Number of users online ${id.length}`);
+
+    io.emit("getUsers", id);
   });
 });
 

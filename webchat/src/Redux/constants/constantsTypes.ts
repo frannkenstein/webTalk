@@ -68,3 +68,7 @@ export enum SocketAction {
 export enum userRoomID {
   ADD_ROOM_ID = "ADD_USER_ROOM_ID",
 }
+
+export enum dialogs {
+  DIALOG = "DIALOG",
+}

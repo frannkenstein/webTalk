@@ -48,11 +48,12 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
     return () => {
       console.log("Unmounted");
     };
-  }, []);
+  }, [chatId]);
 
   useEffect(() => {
     setText("");
     setFile("");
+
     messages && setMess(messages[chatId]);
   }, [messages, chatId]);
 
@@ -212,7 +213,7 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
         <div className="chatSection flex-column">
           <div className="chatStart flex-column">
             <Intro {...{ profile, sender, receiver, friendDetail }} />
-            {mess ? (
+            {mess?.length ? (
               mess.map((m, i) => {
                 return (
                   <div
@@ -242,11 +243,7 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
                 );
               })
             ) : (
-              <>
-                <Skeleton duration={1} count={5} height={10} width={`100%`} />
-
-                <Skeleton duration={1} count={5} height={10} width={`100%`} />
-              </>
+              <Skeleton duration={10} count={10} height={10} width={`100%`} />
             )}
           </div>
           {replyMessage && (

@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MyButton from "../../Components/InputComponents/MyButton";
 // import Follow from "../../Components/Follow/Follow";
 import { socketActions } from "../../Redux/actions/socketActions";
+import { logOutAction } from "../../Redux/actions/dialogActions";
 
 const Chat = loadable(() => import("../../Components/Chat/Chat"));
 const Wait = loadable(() => import("../../Components/Wait/Wait"), {
@@ -32,7 +33,6 @@ const DashBoard = () => {
 
   const dispatch = useDispatch();
 
-  const [user, setuser] = useState();
   const userIdLocal = localStorage.getItem("userId");
   const [loading, setLoading] = useState(false);
   const [senderId, setsenderId] = useState("");
@@ -50,13 +50,8 @@ const DashBoard = () => {
   }
 
   useEffect(() => {
-    setuser(users[0]);
-  }, [users]);
-
-  useEffect(() => {
     load();
     socket.current = io("ws://localhost:3001");
-    // setRoomChatId(localStorage.getItem("chatId"));
 
     dispatch(socketActions(socket.current));
     socket.current.on("connect", () => {
@@ -101,30 +96,27 @@ const DashBoard = () => {
   }, [userIdLocal]);
 
   const handleChat = async (j, image) => {
-    let friendIds = user[j]._id;
+    let friendIds = users[j]._id;
     let roomId = userRoomIdReducer[friendIds];
 
-    try {
-      localStorage.setItem("roomId", roomId);
+    setRoomChatId(roomId);
+    // setRoomChatId((prevState) => {
+    //   return (prevState = "");
+    // });
+    // setRoomChatId((prev) => {
+    //   return (prev = roomId);
+    // });
+    localStorage.setItem("roomId", roomId);
+    localStorage.setItem("chatId", roomId);
 
-      chatId &&
-        setRoomChatId((prevState) => {
-          return "";
-        });
-
-      setRoomChatId((prevState) => roomId);
-      localStorage.setItem("chatId", roomId);
-
-      setreceiverId(user[j]._id);
-
-      setsenderId(localStorage.getItem("userId"));
-      setProfile(image);
-    } catch (e) {
-      console.log(e);
-    }
+    setreceiverId(friendIds);
+    setsenderId(localStorage.getItem("userId"));
+    setProfile(image);
   };
 
-  const handleClick = () => {};
+  const handleClick = () => {
+    dispatch(logOutAction(true));
+  };
 
   return (
     <>
@@ -138,8 +130,8 @@ const DashBoard = () => {
 
             <div className="dm adspbtw font-h2 font-600">{String.CHAT}</div>
             <div className="userList flex-column">
-              {users[0] &&
-                users[0].map((user, i) => {
+              {users &&
+                users.map((user, i) => {
                   let friendId = user._id;
                   let userId = localStorage.getItem("userId");
 

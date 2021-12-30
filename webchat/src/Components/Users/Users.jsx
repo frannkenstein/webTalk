@@ -16,7 +16,7 @@ const Users = ({ sender, userName, friendId, image, key }) => {
       let res = await friendsList(sender, friendId);
 
       res.data.length && setr(res.data[0]._id);
-      console.log(res.data[0]._id);
+
       dispatch(
         setUserRoomID({ friendId: friendId, userRoomId: res.data[0]._id })
       );
@@ -35,9 +35,7 @@ const Users = ({ sender, userName, friendId, image, key }) => {
     <div key={key} className="flex-row" style={{ alignItems: "center" }}>
       <Avatar alt="Aakash Singh" src={image} />
 
-      <div className="nameMessage flex-column">
-        <li className="chatName flex-column font-h4 font-600">{userName}</li>
-      </div>
+      <li className="chatName flex-column font-h4 font-600">{userName}</li>
 
       {user?.users && user?.users?.some((user) => user?.userId === friendId) ? (
         <span className="onLineTag"></span>

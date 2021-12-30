@@ -1,11 +1,12 @@
+import { Cancel } from "@material-ui/icons";
 import React from "react";
 import WDialog from "../Dialog/Dialog";
 import MyButton from "../InputComponents/MyButton";
 
-const LogOutDialog = ({ show, Done, setShow }) => {
+const LogOutDialog = ({ logOut, Cancel }) => {
   return (
     <WDialog
-      show={show}
+      show={true}
       height="30%"
       heading={
         <span
@@ -39,7 +40,7 @@ const LogOutDialog = ({ show, Done, setShow }) => {
             title="Yes"
             id="2"
             handleClick={() => {
-              Done();
+              logOut();
             }}
             tooltip="Yes"
           />
@@ -48,7 +49,7 @@ const LogOutDialog = ({ show, Done, setShow }) => {
             title="No"
             id="1"
             handleClick={(e) => {
-              setShow(false);
+              Cancel();
             }}
             tooltip="No"
           />

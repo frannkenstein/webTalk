@@ -50,6 +50,7 @@ const DashBoard = () => {
   }
 
   useEffect(() => {
+    Notification.requestPermission().then((res) => console.log(res));
     load();
     socket.current = io("ws://localhost:3001");
 
@@ -100,12 +101,7 @@ const DashBoard = () => {
     let roomId = userRoomIdReducer[friendIds];
 
     setRoomChatId(roomId);
-    // setRoomChatId((prevState) => {
-    //   return (prevState = "");
-    // });
-    // setRoomChatId((prev) => {
-    //   return (prev = roomId);
-    // });
+
     localStorage.setItem("roomId", roomId);
     localStorage.setItem("chatId", roomId);
 
@@ -137,23 +133,17 @@ const DashBoard = () => {
 
                   return (
                     !(friendId === userId) && (
-                      <div
-                        className="list flex-row"
+                      <Users
                         onClick={() => {
                           dispatch(userDetail(user.username));
-
                           handleChat(i, user.image);
                         }}
+                        sender={userId}
+                        userName={user.username}
+                        friendId={friendId}
+                        image={user.image}
                         key={user._id}
-                      >
-                        <Users
-                          sender={userId}
-                          userName={user.username}
-                          friendId={friendId}
-                          image={user.image}
-                          key={user._id}
-                        />
-                      </div>
+                      />
                     )
                   );
                 })}

@@ -3,7 +3,7 @@ import { Avatar } from "@material-ui/core";
 import { memo, useEffect, useState } from "react";
 import { friendsList } from "../../api/api";
 import { setUserRoomID } from "../../Redux/actions/userRoomId";
-const Users = ({ sender, userName, friendId, image, key }) => {
+const Users = ({ sender, userName, friendId, image, key, onClick }) => {
   const user = useSelector((state) => state.showOnlineUsers);
   const newMessages = useSelector((state) => state.newMessages);
 
@@ -32,7 +32,12 @@ const Users = ({ sender, userName, friendId, image, key }) => {
     setpop({ ids: newMessages.ids });
   }, [newMessages]);
   return (
-    <div key={key} className="flex-row" style={{ alignItems: "center" }}>
+    <div
+      key={key}
+      className="list flex-row"
+      style={{ alignItems: "center" }}
+      onClick={onClick}
+    >
       <Avatar alt="Aakash Singh" src={image} />
 
       <li className="chatName flex-column font-h4 font-600">{userName}</li>

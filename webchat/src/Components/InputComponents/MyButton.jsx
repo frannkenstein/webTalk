@@ -62,20 +62,10 @@ const MyButton = ({ title, id, handleClick, tooltip, handleSchedule }) => {
             alignItems: "center",
           }}
         >
-          <Tippy
-            render={(attrs) => (
-              <Box style={props} {...attrs}>
-                Send
-              </Box>
-            )}
-            animation={true}
-            onMount={onMount}
-            onHide={onHide}
-          >
-            <button onClick={handleClick} className="scheduleAndSend">
-              Send
-            </button>
-          </Tippy>
+          <span onClick={handleClick} className="scheduleAndSend">
+            Send
+          </span>
+
           <span className="line"></span>
           <Tippy
             render={(attrs) => (

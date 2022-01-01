@@ -89,7 +89,7 @@ const Input = ({
             />
           </form>
         </div>
-        <div style={{ width: "30%", minWidth: "40%" }}>
+        <div style={{ width: "20%", minWidth: "20%" }}>
           <MyButton
             title="Send"
             id="3"
@@ -98,20 +98,7 @@ const Input = ({
             handleSchedule={handleSchduled}
           />
         </div>
-        {/* <MyButton title="Send" id="2" handleClick={handleCreate} />
-        <MyButton
-          title="Schedule 10 mins"
-          id="2"
-          handleClick={handleSchduled}
-        /> */}
       </div>
-      <div
-        className="flex-row adspbtw"
-        style={{
-          width: "98%",
-          background: "white",
-        }}
-      ></div>
     </div>
   );
 };

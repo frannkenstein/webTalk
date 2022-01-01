@@ -42,12 +42,7 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
     setUniqueId(chatId);
   }
   useEffect(() => {
-    console.log("mount");
     friendsID();
-
-    return () => {
-      console.log("Unmounted");
-    };
   }, [chatId]);
 
   useEffect(() => {
@@ -222,10 +217,12 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
                       (m.messageId === scrolled ? " scrolled" : null)
                     }
                     id={m.messageId}
-                    onClick={() => m.referenceId && handleScroll(m.referenceId)}
                   >
                     {
                       <Message
+                        onClick={() =>
+                          m.referenceId && handleScroll(m.referenceId)
+                        }
                         visible={
                           !(i > 0 && mess[i - 1].senderId === mess[i].senderId)
                         }

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { loadReplyFor } from "../../Redux/actions/loadReplyAction";
 import moment from "moment";
 
-const Message = ({ message, visible, userName, key, ref }) => {
+const Message = ({ message, visible, userName, key, ref, onClick }) => {
   const dispatch = useDispatch();
 
   const [time, setTime] = useState("");
@@ -35,6 +35,7 @@ const Message = ({ message, visible, userName, key, ref }) => {
       className={`message flex-column  ${visible ? " show" : ""}`}
       key={key}
       ref={scrollRefArray}
+      onClick={onClick}
     >
       {visible ? (
         <div className="nameTime flex-row">

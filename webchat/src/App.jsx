@@ -1,9 +1,11 @@
 import { signIn, signUp } from "./api/api";
 import { Profiler, useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import loadable from "@loadable/component";
 
 import LogOutDialog from "./Components/LogOut/LogOutDialog";
+import { logOutAction } from "./Redux/actions/dialogActions";
 
 const Login = loadable(() => import("./Screen/Authentication/Login"), {
   fallback: <></>,
@@ -22,6 +24,10 @@ const App = () => {
   const [image, setImage] = useState(null);
   const [show, setShow] = useState(false);
   const [images, setImages] = useState("");
+
+  const dialogs = useSelector((state) => state.dialogs);
+  const dispatch = useDispatch();
+  console.log(dialogs);
 
   useEffect(() => {
     if (localStorage.getItem("Login") === "true") {
@@ -67,14 +73,16 @@ const App = () => {
     }
   };
 
-  function logout() {
-    setShow(true);
-  }
-  const Done = () => {
+  const logOut = () => {
     localStorage.removeItem("roomId");
     localStorage.setItem("Login", "false");
     setlogin("false");
     setShow(false);
+    dispatch(logOutAction(false));
+  };
+
+  const Cancel = () => {
+    dispatch(logOutAction(false));
   };
   function Data(
     id,
@@ -129,7 +137,7 @@ const App = () => {
           <Profiler id="app" onRender={onRender}>
             <DashBoard />
           </Profiler>
-          <LogOutDialog {...{ show, Done, setShow }} />
+          {dialogs.logoutDialog && <LogOutDialog {...{ logOut, Cancel }} />}
         </div>
       )}
     </div>

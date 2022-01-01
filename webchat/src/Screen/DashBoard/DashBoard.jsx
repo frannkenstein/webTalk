@@ -14,8 +14,9 @@ import loadable from "@loadable/component";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import MyButton from "../../Components/InputComponents/MyButton";
-import Follow from "../../Components/Follow/Follow";
+// import Follow from "../../Components/Follow/Follow";
 import { socketActions } from "../../Redux/actions/socketActions";
+import { logOutAction } from "../../Redux/actions/dialogActions";
 
 const Chat = loadable(() => import("../../Components/Chat/Chat"));
 const Wait = loadable(() => import("../../Components/Wait/Wait"), {
@@ -28,9 +29,10 @@ const UserInfo = loadable(() => import("../../Components/UserInfo/UserInfo"), {
 
 const DashBoard = () => {
   const { users } = useSelector((state) => state.users);
+  const userRoomIdReducer = useSelector((state) => state.userRoomIdReducer);
+
   const dispatch = useDispatch();
 
-  const [user, setuser] = useState();
   const userIdLocal = localStorage.getItem("userId");
   const [loading, setLoading] = useState(false);
   const [senderId, setsenderId] = useState("");
@@ -49,16 +51,16 @@ const DashBoard = () => {
   }
 
   useEffect(() => {
-    setuser(users[0]);
-  }, [users]);
-
-  useEffect(() => {
+    Notification.requestPermission().then((res) => console.log(res));
     load();
-    socket.current = io("ws://localhost:3002");
+    socket.current = io("ws://localhost:3001");
 
     dispatch(socketActions(socket.current));
-
+    socket.current.on("connect", () => {
+      console.log(socket.id);
+    });
     socket.current.on("getMessage", (data) => {
+      console.log(data);
       let messageData = {
         time: data.time,
         senderId: data.senderId,
@@ -97,36 +99,22 @@ const DashBoard = () => {
   }, [userIdLocal]);
 
   const handleChat = async (j, image) => {
-    try {
-      let result = await friendsList(
-        user[j]._id,
-        localStorage.getItem("userId")
-      );
+    let friendIds = users[j]._id;
+    let roomId = userRoomIdReducer[friendIds];
 
-      if (result.data.length && !(result.data[0]._id === chatId)) {
-        localStorage.setItem("roomId", result.data[0]._id);
+    setRoomChatId(roomId);
 
-        chatId &&
-          setRoomChatId((prevState) => {
-            return "";
-          });
+    localStorage.setItem("roomId", roomId);
+    localStorage.setItem("chatId", roomId);
 
-        setRoomChatId((prevState) => {
-          return result.data[0]._id;
-        });
-        localStorage.setItem("chatId", result.data[0]._id);
-
-        setreceiverId(user[j]._id);
-
-        setsenderId(localStorage.getItem("userId"));
-        setProfile(image);
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    setreceiverId(friendIds);
+    setsenderId(localStorage.getItem("userId"));
+    setProfile(image);
   };
 
-  const handleClick = () => {};
+  const handleClick = () => {
+    dispatch(logOutAction(true));
+  };
 
   return (
     <>
@@ -140,30 +128,24 @@ const DashBoard = () => {
 
             <div className="dm adspbtw font-h2 font-600">{String.CHAT}</div>
             <div className="userList flex-column">
-              {users[0] &&
-                users[0].map((user, i) => {
+              {users &&
+                users.map((user, i) => {
                   let friendId = user._id;
                   let userId = localStorage.getItem("userId");
 
                   return (
                     !(friendId === userId) && (
-                      <div
-                        className="list flex-row"
+                      <Users
                         onClick={() => {
                           dispatch(userDetail(user.username));
-
                           handleChat(i, user.image);
                         }}
+                        sender={userId}
+                        userName={user.username}
+                        friendId={friendId}
+                        image={user.image}
                         key={user._id}
-                      >
-                        <Users
-                          sender={userId}
-                          userName={user.username}
-                          friendId={friendId}
-                          image={user.image}
-                          key={user._id}
-                        />
-                      </div>
+                      />
                     )
                   );
                 })}

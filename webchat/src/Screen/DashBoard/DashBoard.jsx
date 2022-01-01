@@ -59,6 +59,7 @@ const DashBoard = () => {
       console.log(socket.id);
     });
     socket.current.on("getMessage", (data) => {
+      console.log(data);
       let messageData = {
         time: data.time,
         senderId: data.senderId,

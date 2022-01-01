@@ -51,6 +51,7 @@ const removeUser = (socketId) => {
 const getUser = (receiverId) => {
   return id.find((id) => id.userId === receiverId);
 };
+const forked = fork("./messageQueue/messageQueue.js");
 
 io.on("connection", (socket) => {
   console.log("New websocket connection", socket.id);
@@ -62,7 +63,7 @@ io.on("connection", (socket) => {
 
   socket.on("socket", (data) => {
     const user = getUser(data.receiverId);
-
+    console.log(data);
     io.to(user?.socketId).emit("getMessage", {
       time: data.time,
       senderId: data.senderId,
@@ -75,6 +76,24 @@ io.on("connection", (socket) => {
       attachments: data.message.attachments,
       roomId: data.roomId,
     });
+  });
+
+  forked.on("message", (data) => {
+    const user = getUser(data.receiverId);
+    console.log(user);
+    io.to(user?.socketId).emit("getMessage", {
+      time: data.time,
+      senderId: data.senderId,
+      receiverId: data.receiverId,
+      messageId: data.time,
+      message: data.message.message,
+      referenceId: data.messageId,
+      replied: data.replied,
+      read: data.message.read,
+      attachments: data.message.attachments,
+      roomId: data.roomId,
+    });
+    // console.log(msg);
   });
   socket.on("user_join", (data) => {
     console.log(data);
@@ -139,8 +158,6 @@ io.on("connection", (socket) => {
 // ---------------------------------------------------------------------------------
 
 const pipelineAsync = promisify(pipeline);
-
-const forked = fork("./messageQueue/messageQueue.js");
 
 console.log(__dirname);
 

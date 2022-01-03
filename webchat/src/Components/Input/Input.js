@@ -25,7 +25,7 @@ const Input = ({
   };
 
   return (
-    <div className="completeInput flex-column adjust">
+    <div className="completeInput flex-column align-center justify-evenly">
       <div className="inputSection flex-row adjust">
         <Emoji
           style={{ width: "40px", marginLeft: "10px", cursor: "pointer" }}

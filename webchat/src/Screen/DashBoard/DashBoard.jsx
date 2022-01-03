@@ -122,7 +122,7 @@ const DashBoard = () => {
         <Wait />
       ) : (
         <>
-          <div className="dashboard flex-column font-family">
+          <div className="dashboard flex-column font-family" id="dashboard">
             <span className="logo flex-row adjust">WebChat</span>
             <UserInfo detail={localStorage.getItem("userName")} />
 

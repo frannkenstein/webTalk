@@ -14,14 +14,7 @@ const Message = ({ message, visible, userName, key, ref, onClick }) => {
     let currentTimestamp = new Date(message?.time);
 
     setTime(moment(currentTimestamp).format("MMMM Do YYYY, h:mm:ss a"));
-  }, [message]);
 
-  const handleReply = () => {
-    dispatch(loadReplyFor(message));
-  };
-  const scrollRefArray = useRef();
-
-  useEffect(() => {
     let ele = scrollRefArray.current;
 
     ele &&
@@ -30,15 +23,23 @@ const Message = ({ message, visible, userName, key, ref, onClick }) => {
         left: 0,
       });
   }, [message]);
+
+  const handleReply = () => {
+    dispatch(loadReplyFor(message));
+  };
+  const scrollRefArray = useRef();
+
   return (
     <div
-      className={`message flex-column  ${visible ? " show" : ""}`}
+      className={`messageContainer flex-column align-start  ${
+        visible ? " show" : ""
+      }`}
       key={key}
       ref={scrollRefArray}
       onClick={onClick}
     >
       {visible ? (
-        <div className="nameTime flex-row">
+        <div className="flex-row align-start">
           <span className="name">
             {localStorage.getItem("userId") === message.senderId
               ? localStorage.getItem("userName")
@@ -48,33 +49,32 @@ const Message = ({ message, visible, userName, key, ref, onClick }) => {
         </div>
       ) : null}
 
-      <div className="messageSection flex-column">
+      <div className="messageSection flex-column align-start">
         <span className="date flex-row">{time}</span>
         <div className="replyIcon">
           <Reply handleReply={handleReply} />
         </div>
-        <div className="flex-row">
-          <li>
-            {!message?.message.attachments ? (
-              message?.message?.message[0] !== "/" ? (
-                <span> {message?.message.message}</span>
-              ) : (
-                <img
-                  src={`http://localhost:3001${message?.message.message}`}
-                  alt="img"
-                  style={{ width: "50%" }}
-                />
-              )
+
+        <li>
+          {!message?.message.attachments ? (
+            message?.message?.message[0] !== "/" ? (
+              <span className="messageFont"> {message?.message.message}</span>
             ) : (
-              <div className="replyMessage">
-                <div className="repliedSpan">{message?.message.replied}</div>
-                <span className="repliedMessageSpan">
-                  {message?.message.message}
-                </span>
-              </div>
-            )}
-          </li>
-        </div>
+              <img
+                src={`http://localhost:3001${message?.message.message}`}
+                alt="img"
+                style={{ width: "50%" }}
+              />
+            )
+          ) : (
+            <div>
+              <div className="repliedSpan">{message?.message.replied}</div>
+              <span className="repliedMessageSpan">
+                {message?.message.message}
+              </span>
+            </div>
+          )}
+        </li>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import SearchInput from "../SearchInput/SearchInput";
 import Users from "../Users/Users";
 const ChatHeader = ({ profile, detail, show, videoCalling, audioCalling }) => {
   return (
-    <div className="chatHeader flex-row adspbtw">
+    <div className="chatHeader flex-row justify-between align-center">
       <Users userName={detail} image={profile} />
 
       {show && (

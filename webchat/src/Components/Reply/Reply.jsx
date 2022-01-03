@@ -77,15 +77,15 @@ const Reply = ({
   const [text, setText] = useState("");
   return (
     <div
-      className={`side flex-column ${show ? " sideReply" : " sideReplyHide"}`}
+      className={`flex-column align-center justify-start ${
+        show ? " sideReply" : " sideReplyHide"
+      }`}
     >
-      <div className="thread flex-column">
+      <div className="thread flex-column justify-center align-start">
         Thread
         <Cross className="cross" onClick={() => setShow(!show)} />
       </div>
-      {/* <div className="header flex-row">
-        <ChatHeader detail={detail} show={false} />
-      </div> */}
+
       <div className="sideMessage">
         <Message
           id={message?._id}

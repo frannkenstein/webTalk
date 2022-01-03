@@ -1,7 +1,4 @@
 .customField {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   width: 50%;
   height: 3.5rem;
   margin-top: 2%;
@@ -9,10 +6,6 @@
   border-radius: 10px;
   padding-left: 1%;
   .input {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
     height: 90%;
 
     width: 100%;

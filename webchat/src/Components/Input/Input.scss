@@ -2,7 +2,7 @@
 
 .completeInput {
   width: 100%;
-  justify-content: space-evenly;
+
   position: relative;
 
   .emoji-mart-bar,
@@ -19,6 +19,7 @@
     border: 1px solid #e4e3e3;
     background-color: white;
     width: 98%;
+    border-radius: 10px;
     #textarea {
       width: 99%;
       outline: none;

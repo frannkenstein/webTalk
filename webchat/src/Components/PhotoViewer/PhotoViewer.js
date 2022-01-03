@@ -16,7 +16,7 @@ const PhotoViewer = ({ file, setFile, handleCreate }) => {
         }}
       >
         <div
-          className="cancelButton"
+          className="cancelButton flex-column align-center justify-center"
           onClick={(e) => {
             setFile("");
           }}

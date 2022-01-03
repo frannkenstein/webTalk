@@ -47,7 +47,9 @@ const MyButton = ({ title, id, handleClick, tooltip, handleSchedule }) => {
         >
           {/* <Tippy content={<span>{tooltip}</span>}> */}
           <button
-            className={`myButton ${id === "1" ? " oneButton" : " twoButton"}`}
+            className={`myButton flex-column align-center justify-center ${
+              id === "1" ? " oneButton" : " twoButton"
+            }`}
             onClick={handleClick}
           >
             {title}
@@ -61,8 +63,9 @@ const MyButton = ({ title, id, handleClick, tooltip, handleSchedule }) => {
             flexDirection: "row",
             alignItems: "center",
           }}
+          role="button"
         >
-          <span onClick={handleClick} className="scheduleAndSend">
+          <span onClick={handleClick} className="scheduleAndSend flex-row">
             Send
           </span>
 

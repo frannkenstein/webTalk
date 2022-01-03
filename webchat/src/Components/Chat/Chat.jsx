@@ -200,69 +200,69 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
   };
 
   return (
-    <div className="chatReply flex-row">
+    // <div className="chatContainer flex-row">
+    <div className="chat flex-column font-family">
       <PhotoViewer {...{ file, setFile, handleCreate }} />
-      <div className="chat flex-column font-family">
-        <ChatHeader profile={profile} detail={friendDetail} show={true} />
+      <ChatHeader profile={profile} detail={friendDetail} show={true} />
 
-        <div className="chatSection flex-column">
-          <div className="chatStart flex-column">
-            <Intro {...{ profile, sender, receiver, friendDetail }} />
-            {mess?.length ? (
-              mess.map((m, i) => {
-                return (
-                  <div
-                    className={
-                      "messageSpan flex-column" +
-                      (m.messageId === scrolled ? " scrolled" : null)
-                    }
-                    id={m.messageId}
-                  >
-                    {
-                      <Message
-                        onClick={() =>
-                          m.referenceId && handleScroll(m.referenceId)
-                        }
-                        visible={
-                          !(i > 0 && mess[i - 1].senderId === mess[i].senderId)
-                        }
-                        userName={friendDetail}
-                        message={m}
-                        image={profile}
-                        attachments={m.message.attachments}
-                        sender={m.senderId}
-                        receiver={m.receiverId}
-                        key={m.messageId}
-                        ref={scrollRefArray}
-                      />
-                    }
-                  </div>
-                );
-              })
-            ) : (
-              <Skeleton duration={10} count={10} height={10} width={`100%`} />
-            )}
-          </div>
-          {replyMessage && (
-            <div className="replyContainer">
-              {replyMessage.message.message}
-              <Cross handleCross={handleCrossIcon} />
-            </div>
+      <div className="chatSection flex-column align-center justify-center">
+        <div className="chatStart flex-column">
+          <Intro {...{ profile, sender, receiver, friendDetail }} />
+          {mess?.length ? (
+            mess.map((m, i) => {
+              return (
+                <div
+                  className={
+                    "messageSpan flex-column" +
+                    (m.messageId === scrolled ? " scrolled" : "")
+                  }
+                  id={m.messageId}
+                >
+                  {
+                    <Message
+                      onClick={() =>
+                        m.referenceId && handleScroll(m.referenceId)
+                      }
+                      visible={
+                        !(i > 0 && mess[i - 1].senderId === mess[i].senderId)
+                      }
+                      userName={friendDetail}
+                      message={m}
+                      image={profile}
+                      attachments={m.message.attachments}
+                      sender={m.senderId}
+                      receiver={m.receiverId}
+                      key={m.messageId}
+                      ref={scrollRefArray}
+                    />
+                  }
+                </div>
+              );
+            })
+          ) : (
+            <Skeleton duration={10} count={10} height={10} width={`100%`} />
           )}
-
-          <div className="chatInput flex-row adjust">
-            <Input
-              {...{ text, setText }}
-              {...{ handleCreate, handleSchduled }}
-              variant="Message"
-              receiver={receiver}
-              sender={sender}
-              {...{ file, setFile }}
-            />
-          </div>
         </div>
       </div>
+      {replyMessage && (
+        <div className="replyContainer">
+          {replyMessage.message.message}
+          <Cross handleCross={handleCrossIcon} />
+        </div>
+      )}
+
+      <div className="chatInput flex-row adjust">
+        <Input
+          {...{ text, setText }}
+          {...{ handleCreate, handleSchduled }}
+          variant="Message"
+          receiver={receiver}
+          sender={sender}
+          {...{ file, setFile }}
+        />
+      </div>
     </div>
+    //</div>
   );
 };
 

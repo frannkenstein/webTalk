@@ -17,15 +17,15 @@ const useStyles = makeStyles((theme) => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-const WDialog = ({ show, children, height, heading }) => {
+const WDialog = ({ show, children, height, heading, minWidth, maxWidth }) => {
   return (
     <Dialog
       open={show}
       TransitionComponent={Transition}
       PaperProps={{
         style: {
-          minWidth: "350px",
-          maxWidth: "400px",
+          minWidth: minWidth ?? "36%",
+          maxWidth: maxWidth ?? "36%",
           height: height ?? "30%",
           padding: "1%",
         },

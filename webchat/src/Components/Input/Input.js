@@ -27,12 +27,16 @@ const Input = ({
   return (
     <div className="completeInput flex-column align-center justify-evenly">
       <div className="inputSection flex-row adjust">
-        <Emoji
-          style={{ width: "40px", marginLeft: "10px", cursor: "pointer" }}
-          onClick={() => setShow((prevState) => (prevState = !show))}
-        />
+        <div
+          onClick={() => setShow((val) => !val)}
+          style={{ cursor: "pointer" }}
+        >
+          <ion-icon name="happy-outline"></ion-icon>
+        </div>
+        {/* <button onClick={() => setShow((val) => !val)}>Helo</button> */}
         {show && (
           <Picker
+            onSelect={(emoji) => setText(text + emoji.native)}
             style={{
               position: "absolute",
               bottom: "100%",
@@ -50,6 +54,12 @@ const Input = ({
           value={text}
           onChange={(e) => {
             setText(e.target.value);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              // e.preventDefault();
+              handleCreate(e);
+            }
           }}
           autoComplete="off"
         />

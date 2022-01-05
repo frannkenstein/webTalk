@@ -98,7 +98,7 @@ const DashBoard = () => {
     socket.current.emit("addUser", localStorage.getItem("userId"));
   }, [userIdLocal]);
 
-  const handleChat = async (j, image) => {
+  async function handleChat(j, image) {
     let friendIds = users[j]._id;
     let roomId = userRoomIdReducer[friendIds];
 
@@ -110,11 +110,11 @@ const DashBoard = () => {
     setreceiverId(friendIds);
     setsenderId(localStorage.getItem("userId"));
     setProfile(image);
-  };
+  }
 
-  const handleClick = () => {
+  function handleClick() {
     dispatch(logOutAction(true));
-  };
+  }
 
   return (
     <>

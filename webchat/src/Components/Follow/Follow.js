@@ -2,31 +2,34 @@ import React, { useEffect, useState } from "react";
 import { addFriends, friendsList } from "../../api/api";
 import follow from "../../Assets/follow.png";
 import followed from "../../Assets/followed.png";
-import { addFriend } from "../../Redux/actions/friends";
 import { useDispatch } from "react-redux";
 
-const Follow = ({ friendId, userId }) => {
+const Follow = ({ roomId, sender, friendId, socket }) => {
   const [follows, setFollow] = useState(false);
+
   const dispatch = useDispatch();
 
-  async function friend() {
-    let result = await friendsList(friendId, userId);
-
-    if (result.data) {
-      dispatch(addFriend(result.data[0]._id));
-      setFollow(true);
-    }
-  }
   useEffect(() => {
-    friend();
-  }, []);
+    console.log(sender, friendId);
+    // socket.current.on("addingFriend", (data) => {
+    //   data.roomId && setFollow(true);
+    // });
+  }, [sender, friendId]);
 
-  const handleRequest = () => {
+  const handleRequest = async () => {
+    console.log(sender, friendId);
     try {
-      const result = addFriends({ userId, friendId });
+      const result = await addFriends({ sender, friendId });
       if (result) {
+        console.log(result.data._id);
         setFollow(true);
-        window.location.reload();
+        let data = {
+          sender,
+          friendId,
+          roomId: result.data._id,
+        };
+        socket.current.emit("friendship", data);
+        // window.location.reload();
       }
     } catch (err) {
       console.log(err);
@@ -34,10 +37,10 @@ const Follow = ({ friendId, userId }) => {
   };
   return (
     <>
-      {!follows ? (
-        <img src={follow} alt="" onClick={handleRequest} />
-      ) : (
+      {roomId || follows ? (
         <img src={followed} alt="" />
+      ) : (
+        <img src={follow} alt="" onClick={!roomId && handleRequest} />
       )}
     </>
   );

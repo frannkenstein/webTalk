@@ -31,7 +31,7 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
   const [scrolled, setScrolled] = useState("");
   const [unique, setUniqueId] = useState("");
 
-  async function friendsID() {
+  async function getChat() {
     let data = await chatList(localStorage.getItem("roomId") ?? chatId);
     dispatch(
       loadMesages({
@@ -42,7 +42,7 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
     setUniqueId(chatId);
   }
   useEffect(() => {
-    friendsID();
+    getChat();
   }, [chatId]);
 
   useEffect(() => {
@@ -200,7 +200,6 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
   };
 
   return (
-    // <div className="chatContainer flex-row">
     <div className="chat flex-column font-family">
       <PhotoViewer {...{ file, setFile, handleCreate }} />
       <ChatHeader profile={profile} detail={friendDetail} show={true} />

@@ -14,7 +14,6 @@ import loadable from "@loadable/component";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import MyButton from "../../Components/InputComponents/MyButton";
-// import Follow from "../../Components/Follow/Follow";
 import { socketActions } from "../../Redux/actions/socketActions";
 import { logOutAction } from "../../Redux/actions/dialogActions";
 
@@ -32,7 +31,7 @@ const DashBoard = () => {
   const userRoomIdReducer = useSelector((state) => state.userRoomIdReducer);
 
   const dispatch = useDispatch();
-
+  const [userss, setUser] = useState([]);
   const userIdLocal = localStorage.getItem("userId");
   const [loading, setLoading] = useState(false);
   const [senderId, setsenderId] = useState("");
@@ -89,10 +88,19 @@ const DashBoard = () => {
       dispatch(loadOnlineUsers(data));
     });
 
+    socket.current.on("addingFriend", (data) => {
+      console.log(data);
+      setUser(users);
+    });
+
     return () => {
       socket.current.close();
     };
   }, []);
+
+  useEffect(() => {
+    setUser(users);
+  }, [users]);
 
   useEffect(() => {
     socket.current.emit("addUser", localStorage.getItem("userId"));
@@ -128,13 +136,11 @@ const DashBoard = () => {
 
             <div className="dm adspbtw font-h2 font-600">{String.CHAT}</div>
             <div className="userList flex-column">
-              {users &&
-                users.map((user, i) => {
-                  let friendId = user._id;
+              {userss &&
+                userss.map((user, i) => {
                   let userId = localStorage.getItem("userId");
-
                   return (
-                    !(friendId === userId) && (
+                    !(user._id === userId) && (
                       <Users
                         onClick={() => {
                           dispatch(userDetail(user.username));
@@ -142,9 +148,11 @@ const DashBoard = () => {
                         }}
                         sender={userId}
                         userName={user.username}
-                        friendId={friendId}
+                        friendId={user._id}
                         image={user.image}
                         key={user._id}
+                        dashBoard
+                        socket={socket}
                       />
                     )
                   );

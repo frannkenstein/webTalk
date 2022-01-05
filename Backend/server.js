@@ -36,29 +36,31 @@ const io = new Server(http, {
   cors: { origin: "http://localhost:3000" },
 });
 
-let id = [];
+let activeUsers = [];
 const rooms = {};
 
 const addUser = (userId, socketId) => {
-  !id.some((id) => id.userId === userId) && id.push({ userId, socketId });
-  console.log(`Number of users online ${id.length}`);
+  !activeUsers.some((id) => id.userId === userId) &&
+    activeUsers.push({ userId, socketId });
+  console.log(`Number of users online ${activeUsers.length}`);
 };
 
 const removeUser = (socketId) => {
-  id = id.filter((id) => id.socketId !== socketId);
+  activeUsers = activeUsers.filter((id) => id.socketId !== socketId);
 };
 
 const getUser = (receiverId) => {
-  return id.find((id) => id.userId === receiverId);
+  return activeUsers.find((id) => id.userId === receiverId);
 };
 const forked = fork("./messageQueue/messageQueue.js");
 
 io.on("connection", (socket) => {
   console.log("New websocket connection", socket.id);
   socket.on("addUser", (userId) => {
+    socket.join(userId);
     addUser(userId, socket.id);
 
-    io.emit("getUsers", id);
+    io.emit("getUsers", activeUsers);
   });
 
   socket.on("socket", (data) => {
@@ -78,6 +80,10 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("friendship", (data) => {
+    console.log(data);
+    io.to(data.friendId).emit("addingFriend", data);
+  });
   forked.on("message", (data) => {
     const user = getUser(data.receiverId);
     console.log(user);
@@ -132,7 +138,7 @@ io.on("connection", (socket) => {
     }) => {
       const user = getUser(receiverId);
 
-      io.to(user.socketId).emit("getMessage", {
+      io.to(user.userId).emit("getMessage", {
         time,
         senderId,
         receiverId,
@@ -149,9 +155,9 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("a user disconnected");
     removeUser(socket.id);
-    console.log(`Number of users online ${id.length}`);
+    console.log(`Number of users online ${activeUsers.length}`);
 
-    io.emit("getUsers", id);
+    io.emit("getUsers", activeUsers);
   });
 });
 
@@ -225,7 +231,7 @@ app.post("/reply", (req, res) => {
 
 app.post("/addfriend", async (req, res) => {
   let data = {
-    s1: req.body.userId,
+    s1: req.body.sender,
     s2: req.body.friendId,
   };
   try {

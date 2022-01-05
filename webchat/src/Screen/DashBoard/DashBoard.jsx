@@ -75,12 +75,13 @@ const DashBoard = () => {
         },
       };
 
-      if (messageData.roomId === localStorage.getItem("roomId")) {
+      // if (messageData.roomId === localStorage.getItem("roomId")) {
+      if (true) {
         dispatch(
-          addMessage({ message: messageData, roomId: messageData.roomId })
+          addMessage({ message: messageData, roomId: messageData.receiverId })
         );
       } else {
-        dispatch(loadNewMessage({ roomId: messageData.roomId }));
+        dispatch(loadNewMessage({ roomId: messageData.receiverId }));
       }
     });
 
@@ -114,8 +115,8 @@ const DashBoard = () => {
 
     localStorage.setItem("roomId", roomId);
     localStorage.setItem("chatId", roomId);
-
-    setreceiverId(friendIds);
+    setreceiverId((prev) => (prev = ""));
+    setreceiverId((prev) => (prev = friendIds));
     setsenderId(localStorage.getItem("userId"));
     setProfile(image);
   }
@@ -168,7 +169,7 @@ const DashBoard = () => {
             </div>
           </div>
 
-          {chatId && (
+          {receiverId && (
             <Chat
               chatId={chatId}
               profile={profile}

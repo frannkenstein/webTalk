@@ -15,7 +15,7 @@ var initial = {
 export const newMessageList = (state = initial, action) => {
   switch (action.type) {
     case NewMessages.ADD_NEW_MESSAGE: {
-      let mess = { ids: [...state.ids, action.payload.data.roomId] };
+      let mess = { ids: [...state.ids, action.payload.data.receiverId] };
 
       localStorage.setItem("unread", JSON.stringify(mess));
       return mess;

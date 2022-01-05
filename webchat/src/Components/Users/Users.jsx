@@ -37,9 +37,9 @@ const Users = ({
       console.log(e);
     }
   }
-  useEffect(() => {
-    sender && friendId && userRoomId();
-  }, []);
+  // useEffect(() => {
+  //   sender && friendId && userRoomId();
+  // }, []);
 
   useEffect(() => {
     setpop({ ids: newMessages.ids });
@@ -64,16 +64,6 @@ const Users = ({
       {pop.ids.includes(r) && (
         <span className="newMessage flex-column adjust">1</span>
       )}
-      <div style={{ position: "absolute", right: "20%" }}>
-        {dashBoard && (
-          <Follow
-            roomId={r}
-            sender={sender1 ?? sender}
-            friendId={friendId1 ?? friendId}
-            socket={socket}
-          />
-        )}
-      </div>
     </div>
   );
 };

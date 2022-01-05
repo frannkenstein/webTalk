@@ -178,7 +178,37 @@ app.post("/signUp", user);
 app.post("/login", user);
 
 app.get("/userDetails", userDetails);
-app.get("/friendsList", list);
+app.get("/friendsList", async (req, res) => {
+  const s1 = req.query.s1;
+  const s2 = req.query.s2;
+
+  try {
+    let data = await AddFriend.find({
+      $or: [
+        { $and: [{ s1: s1 }, { s2: s2 }] },
+        { $and: [{ s1: s2 }, { s2: s1 }] },
+      ],
+    });
+
+    if (data.length) {
+      res.status(200).json(data);
+    } else {
+      try {
+        console.log("Here3");
+        let data = await AddFriend.create({ s1, s2 });
+        console.log(data);
+        if (data) {
+          res.status(200).json(data);
+        }
+      } catch (error) {
+        console.log(error.message, "chat creation failed.");
+      }
+    }
+  } catch (err) {
+    res.status(500).send(err);
+    console.log(err);
+  }
+});
 
 app.get("/chatList/:id", chatList);
 
@@ -198,6 +228,7 @@ app.get("/replyList/:conversationId", async (req, res) => {
 
 app.post("/create", async (req, res) => {
   const data = req.body;
+  console.log(data);
   if (data.scheduleTime) {
     queue.push(data);
     forked.send(data);
@@ -206,8 +237,9 @@ app.post("/create", async (req, res) => {
     const conversation = new Conversation(data);
     try {
       await conversation.save();
-      res.status(201).send(data);
+      res.status(200).send(data);
     } catch (error) {
+      console.log(error);
       res.status(500).send(err);
     }
   }

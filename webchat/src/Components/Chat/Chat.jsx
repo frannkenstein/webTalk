@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "./Chat.scss";
 import "../../Styles/style.scss";
 import ChatHeader from "../ChatHeader/ChatHeader";
-import { create, chatList, upload } from "../../api/api";
+import { create, chatList, upload, friendsList } from "../../api/api";
 import Message from "../Message/Message";
 import Input from "../Input/Input";
 import { addMessage, loadMesages } from "../../Redux/actions/messageActions";
@@ -16,6 +16,7 @@ import Intro from "../Intro/Intro";
 import Cross from "../Cross/Cross";
 import { clearReply } from "../../Redux/actions/loadReplyAction";
 import PhotoViewer from "../PhotoViewer/PhotoViewer";
+import { setUserRoomID } from "../../Redux/actions/userRoomId";
 const Chat = ({ chatId, profile, socket, sender, receiver }) => {
   const messages = useSelector((state) => state.messages);
   const { friendDetail } = useSelector((state) => state.friendDetails);
@@ -31,19 +32,34 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
   const [scrolled, setScrolled] = useState("");
   const [unique, setUniqueId] = useState("");
 
-  async function getChat() {
-    let data = await chatList(localStorage.getItem("roomId") ?? chatId);
+  async function getChat(roomId) {
+    let data = await chatList(roomId);
     dispatch(
       loadMesages({
         messages: data.data,
         roomId: chatId,
       })
     );
-    setUniqueId(chatId);
+    setUniqueId(roomId);
   }
+
+  async function userRoomId() {
+    let friendId = receiver;
+    console.log("here");
+    try {
+      let res = await friendsList(sender, friendId);
+
+      res && getChat(res.data[0]._id);
+
+      // dispatch(setUserRoomID({ friendId: friendId, userRoomId: friendId }));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   useEffect(() => {
-    getChat();
-  }, [chatId]);
+    userRoomId();
+  }, [receiver]);
 
   useEffect(() => {
     setText("");
@@ -76,9 +92,11 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
     if (text) {
       try {
         messageData.message.message = text;
+
+        console.log(messageData);
         let res = await create(messageData);
 
-        dispatch(addMessage({ message: messageData, roomId: unique }));
+        dispatch(addMessage({ message: messageData, roomId: receiver }));
 
         users &&
           users?.some((user) => user?.userId === receiver) &&
@@ -102,92 +120,10 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
       setText("");
       dispatch(clearReply());
     }
-    if (file) {
-      messageData.message.message = file;
-      let convert = JSON.stringify(messageData);
-      let data = new FormData();
-      data.append("file", file);
-      data.append("messageData", convert);
-
-      let result = await upload(data);
-      if (result.status === 201) {
-        let message = result.data.path;
-
-        dispatch(
-          addMessage({
-            message: {
-              time: id,
-              senderId: sender,
-              receiverId: receiver,
-              messageId: id,
-              roomId: unique,
-              referenceId: replyMessage ? replyMessage?.messageId : null,
-
-              message: {
-                message: message,
-                replied: replyMessage ? replyMessage.message.message : null,
-                read: false,
-                attachments: replyMessage ? 1 : null,
-              },
-            },
-
-            roomId: unique,
-          })
-        );
-
-        users &&
-          users?.some((user) => user?.userId === receiver) &&
-          socket.current.emit("sendmessage", {
-            time: id,
-            senderId: sender,
-            receiverId: receiver,
-            messageId: id,
-            message: message,
-            referenceId: replyMessage ? replyMessage?.messageId : null,
-            replied: replyMessage ? replyMessage.message.message : null,
-            read: false,
-            attachments: replyMessage ? 1 : null,
-            roomId: unique,
-          });
-      }
-
-      setFile("");
-    }
   };
-  const handleSchduled = async (e) => {
-    e.preventDefault();
 
-    let id = Date.now();
+  const handleSchduled = (e) => {};
 
-    let scheduleTime = 30;
-
-    if (text) {
-      let messageData = {
-        scheduleTime: scheduleTime,
-        time: id,
-        senderId: sender,
-        receiverId: receiver,
-        messageId: id,
-
-        roomId: unique,
-        referenceId: replyMessage ? replyMessage?.messageId : null,
-        message: {
-          message: text,
-          replied: replyMessage ? replyMessage.message.message : null,
-          read: false,
-          attachments: replyMessage ? 1 : null,
-        },
-      };
-      try {
-        let res = await create(messageData);
-        if (res.status === 200) {
-          setText("");
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
   const handleScroll = useCallback((i) => {
     setScrolled((scrolled) => (scrolled = i));
 
@@ -266,3 +202,90 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
 };
 
 export default memo(Chat);
+
+// if (file) {
+//   messageData.message.message = file;
+//   let convert = JSON.stringify(messageData);
+//   let data = new FormData();
+//   data.append("file", file);
+//   data.append("messageData", convert);
+
+//   let result = await upload(data);
+//   if (result.status === 201) {
+//     let message = result.data.path;
+
+//     dispatch(
+//       addMessage({
+//         message: {
+//           time: id,
+//           senderId: sender,
+//           receiverId: receiver,
+//           messageId: id,
+//           roomId: unique,
+//           referenceId: replyMessage ? replyMessage?.messageId : null,
+
+//           message: {
+//             message: message,
+//             replied: replyMessage ? replyMessage.message.message : null,
+//             read: false,
+//             attachments: replyMessage ? 1 : null,
+//           },
+//         },
+
+//         roomId: unique,
+//       })
+//     );
+
+//     users &&
+//       users?.some((user) => user?.userId === receiver) &&
+//       socket.current.emit("sendmessage", {
+//         time: id,
+//         senderId: sender,
+//         receiverId: receiver,
+//         messageId: id,
+//         message: message,
+//         referenceId: replyMessage ? replyMessage?.messageId : null,
+//         replied: replyMessage ? replyMessage.message.message : null,
+//         read: false,
+//         attachments: replyMessage ? 1 : null,
+//         roomId: unique,
+//       });
+//   }
+
+//   setFile("");
+// }
+
+// const handleSchduled = async (e) => {
+//   e.preventDefault();
+
+//   let id = Date.now();
+
+//   let scheduleTime = 30;
+
+//   if (text) {
+//     let messageData = {
+//       scheduleTime: scheduleTime,
+//       time: id,
+//       senderId: sender,
+//       receiverId: receiver,
+//       messageId: id,
+
+//       roomId: unique,
+//       referenceId: replyMessage ? replyMessage?.messageId : null,
+//       message: {
+//         message: text,
+//         replied: replyMessage ? replyMessage.message.message : null,
+//         read: false,
+//         attachments: replyMessage ? 1 : null,
+//       },
+//     };
+//     try {
+//       let res = await create(messageData);
+//       if (res.status === 200) {
+//         setText("");
+//       }
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   }
+// };

@@ -48,7 +48,7 @@ const DashBoard = () => {
     dispatch(loadUsers(data.data));
     setLoading(false);
   }
-
+  localStorage.removeItem("roomId");
   useEffect(() => {
     Notification.requestPermission().then((res) => console.log(res));
     load();
@@ -75,8 +75,8 @@ const DashBoard = () => {
         },
       };
 
-      // if (messageData.roomId === localStorage.getItem("roomId")) {
-      if (true) {
+      if (messageData.roomId === localStorage.getItem("roomId")) {
+        // if (true) {
         dispatch(
           addMessage({ message: messageData, roomId: messageData.receiverId })
         );

@@ -50,7 +50,7 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
       let res = await friendsList(sender, friendId);
 
       res && getChat(res.data[0]._id);
-
+      localStorage.setItem("roomId", res.data[0]._id);
       // dispatch(setUserRoomID({ friendId: friendId, userRoomId: friendId }));
     } catch (e) {
       console.log(e);

@@ -4,7 +4,7 @@ import "./SearchInput.scss";
 const SearchInput = () => {
   return (
     <div className="search flex-row adjust">
-      <input className="input" /> <Search />
+      <input className="input  flex-row align-center" /> <Search />
     </div>
   );
 };

@@ -4,7 +4,7 @@ const Input = ({ id, value, onChange }) => {
   return (
     <div className="customField flex-row align-center">
       {id === "1" && (
-        <div className="input">
+        <div className="input flex-row align-center">
           <img
             src="https://img.icons8.com/ios-glyphs/30/000000/user.png"
             alt=""
@@ -34,7 +34,7 @@ const Input = ({ id, value, onChange }) => {
       )}
 
       {id === "3" && (
-        <div className="input">
+        <div className="input flex-row align-center">
           <input
             type="text"
             placeholder="Group Name"

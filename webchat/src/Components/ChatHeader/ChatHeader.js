@@ -11,21 +11,19 @@ const ChatHeader = ({ profile, detail, show, videoCalling, audioCalling }) => {
     <div className="chatHeader flex-row justify-between align-center">
       <Users userName={detail} image={profile} />
 
-      {show && (
-        <div className="headerContent flex-row">
-          <SearchInput />
-          <PhoneIcon
-            className="iconParent flex-column adjust"
-            onClick={audioCalling}
-            style={{ color: "#a71b1b" }}
-          />
-          <VideoCallOutlinedIcon
-            className="iconParent flex-column adjust"
-            onClick={videoCalling}
-          />
-          <MoreVertIcon className="iconParent flex-column adjust" />
-        </div>
-      )}
+      <div className="headerContent flex-row">
+        <SearchInput />
+        <PhoneIcon
+          className="iconParent flex-column adjust"
+          onClick={audioCalling}
+          style={{ color: "#a71b1b" }}
+        />
+        <VideoCallOutlinedIcon
+          className="iconParent flex-column adjust"
+          onClick={videoCalling}
+        />
+        <MoreVertIcon className="iconParent flex-column adjust" />
+      </div>
     </div>
   );
 };

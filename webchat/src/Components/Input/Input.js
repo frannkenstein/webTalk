@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./Input.scss";
 import { memo } from "react";
-import AttachFileRoundedIcon from "@material-ui/icons/AttachFileRounded";
+import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
 import MyButton from "../InputComponents/MyButton";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
@@ -64,8 +64,8 @@ const Input = ({
           autoComplete="off"
         />
         <div className="flex-row adspbtw">
-          <form action="#" enctype="multipart/form-data">
-            <label for="fileTag" style={{ cursor: "pointer" }}>
+          <form action="#" encType="multipart/form-data">
+            <label htmlFor="fileTag" style={{ cursor: "pointer" }}>
               <AttachFileRoundedIcon />
             </label>
             <input

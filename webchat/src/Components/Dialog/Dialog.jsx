@@ -1,18 +1,19 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Dialog from "@material-ui/core/Dialog";
+// import { makeStyles } from "@material-ui/core/styles";
+import Dialog from "@mui/material/Dialog";
 import "./Dialog.scss";
-import Slide from "@material-ui/core/Slide";
-const useStyles = makeStyles((theme) => ({
-  dialog: {
-    position: "relative",
-    width: "100%",
-  },
-  profileDialog: {
-    position: "relative",
-    height: "none",
-  },
-}));
+import Slide from "@mui/material/Slide";
+
+// const useStyles = makeStyles((theme) => ({
+//   dialog: {
+//     position: "relative",
+//     width: "100%",
+//   },
+//   profileDialog: {
+//     position: "relative",
+//     height: "none",
+//   },
+// }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

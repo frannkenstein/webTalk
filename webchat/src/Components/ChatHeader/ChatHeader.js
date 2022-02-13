@@ -1,9 +1,11 @@
 import { memo } from "react";
 
 import "./ChatHeader.scss";
-import PhoneIcon from "@material-ui/icons/Phone";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import VideoCallOutlinedIcon from "@material-ui/icons/VideoCallOutlined";
+import PhoneIcon from "@mui/icons-material/Phone";
+import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
+
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import SearchInput from "../SearchInput/SearchInput";
 import Users from "../Users/Users";
 const ChatHeader = ({ profile, detail, show, videoCalling, audioCalling }) => {

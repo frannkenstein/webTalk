@@ -29,7 +29,7 @@ const Login = (props) => {
           {active ? (
             <div className="box" onClick={() => setActive(false)}>
               <h2>{String.WELCOME}</h2>
-              <h1>{String.SIGN}</h1>;
+              <h1>{String.SIGN}</h1>
               <div style={{ width: "50%" }}>
                 <MyButton title="SIGN IN" id="1" tooltip="SignIn" />
               </div>
@@ -53,7 +53,7 @@ const Login = (props) => {
                 className="social"
                 style={{ display: "flex", flexDirection: "row" }}
               >
-                <PopUp />
+                {/* <PopUp /> */}
               </div>
               {props.image && (
                 <img
@@ -82,7 +82,7 @@ const Login = (props) => {
                 value={props.p3}
                 onChange={(e) => props.setP3(e.target.value)}
               />
-              <label for="profileImage" className="uploadButton">
+              <label htmlFor="profileImage" className="uploadButton">
                 Upload Profile Pic
               </label>
               <input
@@ -109,7 +109,7 @@ const Login = (props) => {
                 className="social"
                 style={{ display: "flex", flexDirection: "row" }}
               >
-                <PopUp />
+                {/* <PopUp /> */}
               </div>
               <span>{String.CREAD}</span>
 

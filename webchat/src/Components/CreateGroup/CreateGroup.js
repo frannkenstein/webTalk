@@ -11,7 +11,7 @@ const CreateGroup = ({ users }) => {
   }
 
   return (
-    <WDialog show="true">
+    <WDialog show={true}>
       Create Group
       <Input variant="Group" />
       <div className="selectUsers flex-row">

@@ -1,6 +1,6 @@
 import { memo } from "react";
 import "./UserInfo.scss";
-import { Avatar } from "@material-ui/core";
+import Avatar from "@mui/material/Avatar";
 
 const UserInfo = ({ detail }) => {
   return (

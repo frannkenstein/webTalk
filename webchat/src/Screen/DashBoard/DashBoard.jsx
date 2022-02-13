@@ -140,6 +140,7 @@ const DashBoard = () => {
               {userss &&
                 userss.map((user, i) => {
                   let userId = localStorage.getItem("userId");
+
                   return (
                     !(user._id === userId) && (
                       <Users
@@ -151,9 +152,9 @@ const DashBoard = () => {
                         userName={user.username}
                         friendId={user._id}
                         image={user.image}
-                        key={user._id}
                         dashBoard
                         socket={socket}
+                        k={user._id}
                       />
                     )
                   );

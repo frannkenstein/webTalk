@@ -1,4 +1,3 @@
-import { Cancel } from "@material-ui/icons";
 import React from "react";
 import WDialog from "../Dialog/Dialog";
 import MyButton from "../InputComponents/MyButton";

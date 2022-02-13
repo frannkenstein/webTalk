@@ -1,4 +1,4 @@
-import { Avatar } from "@material-ui/core";
+import Avatar from "@mui/material/Avatar";
 import "./Intro.scss";
 import { memo } from "react";
 const Intro = ({ profile, sender, receiver, friendDetail }) => {

@@ -5,10 +5,11 @@ import { useDispatch } from "react-redux";
 import { loadReplyFor } from "../../Redux/actions/loadReplyAction";
 import moment from "moment";
 
-const Message = ({ message, visible, userName, key, ref, onClick }) => {
+const Message = ({ message, visible, userName, key, onClick }) => {
   const dispatch = useDispatch();
 
   const [time, setTime] = useState("");
+  const scrollRefArray = useRef();
 
   useEffect(() => {
     let currentTimestamp = new Date(message?.time);
@@ -27,7 +28,6 @@ const Message = ({ message, visible, userName, key, ref, onClick }) => {
   const handleReply = () => {
     dispatch(loadReplyFor(message));
   };
-  const scrollRefArray = useRef();
 
   return (
     <div

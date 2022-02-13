@@ -16,6 +16,8 @@ import Intro from "../Intro/Intro";
 import Cross from "../Cross/Cross";
 import { clearReply } from "../../Redux/actions/loadReplyAction";
 import PhotoViewer from "../PhotoViewer/PhotoViewer";
+import moment from "moment";
+
 import { setUserRoomID } from "../../Redux/actions/userRoomId";
 const Chat = ({ chatId, profile, socket, sender, receiver }) => {
   const messages = useSelector((state) => state.messages);
@@ -144,7 +146,16 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
         <div className="chatStart flex-column">
           <Intro {...{ profile, sender, receiver, friendDetail }} />
           {mess?.length ? (
-            mess.map((m, i) => {
+            mess.map((m, index) => {
+              let line = false;
+              if (index >= 1) {
+                let t1 = new Date(mess[index - 1]?.time);
+                let t2 = new Date(mess[index]?.time);
+
+                console.log(t2.getDate() - t1.getDate());
+                if (t2.getDate() - t1.getDate() >= 1) line = true;
+              }
+
               return (
                 <div
                   className={
@@ -152,14 +163,28 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
                     (m.messageId === scrolled ? " scrolled" : "")
                   }
                   id={m.messageId}
+                  key={m.messageId}
                 >
+                  {line && (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "2px",
+
+                        backgroundColor: "black",
+                      }}
+                    ></div>
+                  )}
                   {
                     <Message
                       onClick={() =>
                         m.referenceId && handleScroll(m.referenceId)
                       }
                       visible={
-                        !(i > 0 && mess[i - 1].senderId === mess[i].senderId)
+                        !(
+                          index > 0 &&
+                          mess[index - 1].senderId === mess[index].senderId
+                        )
                       }
                       userName={friendDetail}
                       message={m}
@@ -168,7 +193,6 @@ const Chat = ({ chatId, profile, socket, sender, receiver }) => {
                       sender={m.senderId}
                       receiver={m.receiverId}
                       key={m.messageId}
-                      ref={scrollRefArray}
                     />
                   }
                 </div>

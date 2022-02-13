@@ -8,6 +8,7 @@ const Input = ({ id, value, onChange }) => {
           <img
             src="https://img.icons8.com/ios-glyphs/30/000000/user.png"
             alt=""
+            className="inputImg"
           />
           <input
             type="text"
